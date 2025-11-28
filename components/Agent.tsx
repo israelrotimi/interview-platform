@@ -10,7 +10,7 @@ enum CallStatus {
   INACTIVE = "INACTIVE",
   CONNECTING = "CONNECTING",
   ACTIVE = "ACTIVE",
-  FINSHED = "FINSHED",
+  FINISHED = "FINISHED",
 }
 
 interface savedMessage {
@@ -26,7 +26,7 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
 
   useEffect(() => {
     const onCallStart = () => setCallStatus(CallStatus.ACTIVE);
-    const onCallEnd = () => setCallStatus(CallStatus.FINSHED);
+    const onCallEnd = () => setCallStatus(CallStatus.FINISHED);
 
     const onMessage = (message: Message) => {
       if(message.type === "transcript" && message.transcriptType === "final"){
@@ -59,7 +59,7 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
   }, [])
 
   useEffect(() => {
-    if(callStatus === CallStatus.FINSHED) router.push("/");
+    if(callStatus === CallStatus.FINISHED) router.push("/");
   }, [messages, callStatus, type, userId]);
   
   const handleCall = async () => {
@@ -74,13 +74,13 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
   }
 
   const handleDisconnect = () => {
-    setCallStatus(CallStatus.FINSHED);
+    setCallStatus(CallStatus.FINISHED);
 
     vapi.stop()
   }
 
   const latestMessage = messages[messages.length -1]?.content;
-  const isCallInactiveOrFinished = callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINSHED
+  const isCallInactiveOrFinished = callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED
 
   
   return (
